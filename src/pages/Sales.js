@@ -1,12 +1,12 @@
 import React from "react";
 import MainLayout from "../components/MainLayout";
 
-const Home = () => {
+const Sales = () => {
   return (
-    <MainLayout title={"Prediksi"}>
-      <p>Prediksi</p>
+    <MainLayout title={"Penjualan"}>
+      <p>Penjualan</p>
     </MainLayout>
   );
 };
 
-export default Home;
+export default Sales;
