@@ -13,6 +13,7 @@ import {
   ListItemIcon,
 } from "@mui/material";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import { Modal, Button } from "react-bootstrap";
 import menu from "../config/menu";
 
 const drawerWidth = 240;
@@ -22,6 +23,10 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const [active, setActive] = React.useState("");
   const location = useLocation();
+  const [show, setShow] = React.useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const handleLogout = () => {
     logout();
@@ -47,6 +52,20 @@ const Sidebar = () => {
       variant="permanent"
       anchor="left"
     >
+      <Modal show={show} onHide={handleClose} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Konfirmasi Logout</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Anda ingin logout?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Tidak
+          </Button>
+          <Button className="btn-primary" onClick={handleLogout}>
+            Ya
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <Toolbar>
         <h3>Dzakir Motor</h3>
       </Toolbar>
@@ -54,6 +73,7 @@ const Sidebar = () => {
       <List sx={{ mt: 5 }}>
         {menu.map((item, index) => (
           <ListItem
+            sx={active === item.to ? { bgcolor: "#ff8c32" } : {}}
             key={item.text}
             disablePadding
             onClick={() => {
@@ -61,13 +81,13 @@ const Sidebar = () => {
               setActive(item.to);
             }}
           >
-            <ListItemButton sx={active === item.to ? { color: "#ff8c32" } : {}}>
+            <ListItemButton>
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.text} />
             </ListItemButton>
           </ListItem>
         ))}
-        <ListItem key={"logout"} disablePadding onClick={handleLogout}>
+        <ListItem key={"logout"} disablePadding onClick={handleShow}>
           <ListItemButton>
             <ListItemIcon>
               <LogoutRoundedIcon style={{ fill: "#eeeeee" }} />

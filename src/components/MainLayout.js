@@ -1,5 +1,5 @@
 import React from "react";
-import { useStoreActions } from "easy-peasy";
+import { useStoreActions, useStoreState } from "easy-peasy";
 import { useNavigate } from "react-router";
 import Sidebar from "./Sidebar";
 import {
@@ -12,12 +12,15 @@ import {
   MenuItem,
 } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
+import Card from "react-bootstrap/Card";
 
 const drawerWidth = 240;
 
 const MainLayout = ({ children, title = "title" }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const logout = useStoreActions((actions) => actions.logout);
+  const successToast = useStoreState((state) => state.setSuccessToast);
+  const errorToast = useStoreState((state) => state.setErrorToast);
   const navigate = useNavigate();
 
   const handleMenu = (event) => {
@@ -57,6 +60,13 @@ const MainLayout = ({ children, title = "title" }) => {
             >
               <AccountCircle style={{ fill: "#06113c" }} />
             </IconButton>
+            <p
+              className="d-inline-block text-secondary"
+              style={{ cursor: "pointer" }}
+              onClick={handleMenu}
+            >
+              Admin
+            </p>
             <Menu
               id="menu-appbar"
               anchorEl={anchorEl}
@@ -82,8 +92,21 @@ const MainLayout = ({ children, title = "title" }) => {
         component="main"
         sx={{ flexGrow: 1, bgcolor: "background.default", p: 3, pt: 10 }}
       >
-        <h1>{title}</h1>
-        {children}
+        {successToast && (
+          <div className="alert alert-success" role="alert">
+            {successToast}
+          </div>
+        )}
+        {errorToast && (
+          <div className="alert alert-danger" role="alert">
+            {errorToast}
+          </div>
+        )}
+        <h3 className="mb-5">{title}</h3>
+        <Card>
+          <Card.Header></Card.Header>
+          <Card.Body className="pb-5">{children}</Card.Body>
+        </Card>
       </Box>
     </Box>
   );

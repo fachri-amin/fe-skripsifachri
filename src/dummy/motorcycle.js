@@ -1,0 +1,48 @@
+const data = [
+  {
+    id: 2,
+    nama: "Vario 125",
+    merk: "honda",
+    volume_silinder: 125,
+    jumlah_silinder: 1,
+    transmisi: "otomatis",
+    jenis: "matic",
+    created_at: "2022-07-19T07:31:29.215729Z",
+    updated_at: "2022-07-19T07:31:29.215729Z",
+  },
+  {
+    id: 3,
+    nama: "Vario 125",
+    merk: "honda",
+    volume_silinder: 125,
+    jumlah_silinder: 1,
+    transmisi: "otomatis",
+    jenis: "matic",
+    created_at: "2022-07-19T07:31:29.215729Z",
+    updated_at: "2022-07-19T07:31:29.215729Z",
+  },
+  {
+    id: 4,
+    nama: "Vario 125",
+    merk: "honda",
+    volume_silinder: 125,
+    jumlah_silinder: 1,
+    transmisi: "otomatis",
+    jenis: "matic",
+    created_at: "2022-07-19T07:31:29.215729Z",
+    updated_at: "2022-07-19T07:31:29.215729Z",
+  },
+  {
+    id: 5,
+    nama: "Vario 125",
+    merk: "honda",
+    volume_silinder: 125,
+    jumlah_silinder: 1,
+    transmisi: "otomatis",
+    jenis: "matic",
+    created_at: "2022-07-19T07:31:29.215729Z",
+    updated_at: "2022-07-19T07:31:29.215729Z",
+  },
+];
+
+export default data;

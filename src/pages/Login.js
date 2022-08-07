@@ -3,11 +3,11 @@ import { Button, Col, Container, Row, Card, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { useLogin } from "../hooks/Auth";
+import { useLogin } from "../hooks";
 import { setAuthHeader } from "../services/axios";
 import { useStoreActions } from "easy-peasy";
 
-export const LoginSchemaValidation = Yup.object().shape({
+const LoginSchemaValidation = Yup.object().shape({
   username: Yup.string().required("Username Wajib diisi"),
   password: Yup.string().required("Kata sandi wajib di isi"),
 });
@@ -18,8 +18,8 @@ const Login = () => {
   const formikRef = React.useRef(null);
   const navigate = useNavigate();
 
-  const handleFormSubmit = (formData) => {
-    mutate(formData, {
+  const handleFormSubmit = (formValue) => {
+    mutate(formValue, {
       onSuccess: (res) => {
         const { token, user } = res?.data;
 
