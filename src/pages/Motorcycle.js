@@ -1,13 +1,27 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useMemo, useEffect } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MainLayout from "../components/MainLayout";
 import Table from "../components/Table";
-import { useMotorcycle } from "../hooks/Motorcycle";
+import ModalConfirmation from "../components/ModalConfirmation";
+import {
+  useMotorcycle,
+  useDeleteMotorcycle,
+  useIncreaseStokMotorcycle,
+  useDecreaseStokMotorcycle,
+} from "../hooks/Motorcycle";
+import { Button, Col, Row } from "react-bootstrap";
+import AddBoxRoundedIcon from "@mui/icons-material/AddBoxRounded";
+import IndeterminateCheckBoxRoundedIcon from "@mui/icons-material/IndeterminateCheckBoxRounded";
 
 const Motorcycle = () => {
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { data, isLoading, filter, filterMotorcycles } = useMotorcycle();
   const navigate = useNavigate();
+  const { mutate: deleteMotorcycle } = useDeleteMotorcycle();
+  const { mutate: increaseStokMotorcycle } = useIncreaseStokMotorcycle();
+  const { mutate: decreaseStokMotorcycle } = useDecreaseStokMotorcycle();
+  const [deleteId, setDeleteId] = useState(false);
 
   const columns = useMemo(
     () => [
@@ -40,26 +54,46 @@ const Motorcycle = () => {
         accessor: "jenis",
       },
       {
+        Header: "Stok",
+        accessor: "stok",
+        Cell: ({ row }) => {
+          return (
+            <>
+              {row.values.stok}
+              <div className="d-inline ms-2">
+                <AddBoxRoundedIcon
+                  style={{ cursor: "pointer" }}
+                  onClick={() => increaseStokMotorcycle(row.original.id)}
+                />
+                {row.values.stok > 0 && (
+                  <IndeterminateCheckBoxRoundedIcon
+                    style={{ cursor: "pointer" }}
+                    onClick={() => decreaseStokMotorcycle(row.original.id)}
+                  />
+                )}
+              </div>
+            </>
+          );
+        },
+      },
+      {
         Header: "Aksi",
         accessor: "id",
         Cell: ({ row }) => (
           <>
             <a
-              className="text-orange wait-pay"
+              className="text-orange wait-pay btn btn-secondary"
               style={{ cursor: "pointer" }}
-              onClick={() => navigate.push(`/`)}
+              onClick={() => navigate(`/motorcycle/edit/${row.values.id}`)}
             >
-              add
+              Edit
             </a>
             <a
-              className={"text-orange wait-pay ms-3"}
+              className={"text-orange wait-pay ms-3 btn btn-danger"}
               style={{ cursor: "pointer" }}
-              title={
-                !row.original.can_delete &&
-                "Data tidak dapat dihapus karena sudah digunakan"
-              }
               onClick={() => {
-                console.log("delete");
+                setDeleteId(row.values.id);
+                setShowDeleteModal(true);
               }}
             >
               delete
@@ -77,8 +111,43 @@ const Motorcycle = () => {
       idSerial: (filter?.page - 1) * 10 + index + 1,
     })) || [];
 
+  const handleDeleteData = () => {
+    deleteMotorcycle(deleteId, {
+      onSuccess: () => {
+        window.scrollTo(0, 0);
+        setShowDeleteModal(false);
+        setDeleteId(null);
+      },
+      onError: (res) => {
+        // showToast("error", convertErrorMessageFormat(res.response.status, res.response.data.message), null);
+      },
+    });
+  };
+
   return (
     <MainLayout title={"Sepeda Motor"}>
+      <ModalConfirmation
+        title={"Konfirmasi Hapus Sepeda Motor"}
+        bodyText={"Ingin menghapus data sepeda motor ini?"}
+        show={showDeleteModal}
+        handleClose={() => setShowDeleteModal(false)}
+        handleReject={() => setShowDeleteModal(false)}
+        handleAccept={handleDeleteData}
+      />
+      <Row className="justify-content-end mb-4">
+        <Col lg={3}>
+          <div className="d-grid gap-2 pt-4">
+            <Button
+              variant="primary"
+              size="lg"
+              type="button"
+              onClick={() => navigate("/motorcycle/add", { replace: true })}
+            >
+              Tambah Sepeda Motor
+            </Button>
+          </div>
+        </Col>
+      </Row>
       <Table
         columns={columns}
         data={dataWithIDSerial}

@@ -1,6 +1,9 @@
-import React from "react";
+import { useEffect, useRef } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useStoreActions } from "easy-peasy";
 import MainLayout from "../components/MainLayout";
-import { Button, Col, Container, Row, Modal, Form } from "react-bootstrap";
+import { useDetailMotorcycle, useEditMotorcycle } from "../hooks/Motorcycle";
+import { Button, Col, Container, Row, Form } from "react-bootstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import {
@@ -8,65 +11,57 @@ import {
   merkOptions,
   transmisiOptions,
 } from "../constant/prediction";
-import { usePrediction } from "../hooks";
 
 const SchemaValidation = Yup.object().shape({
+  nama: Yup.string().required("Username Wajib diisi"),
+  merk: Yup.string().required("Kata sandi wajib di isi"),
   volume_silinder: Yup.string().required("Username Wajib diisi"),
-  jumlah_silinder: Yup.string().required("Jumlah silinder di isi"),
-  tahun: Yup.string().required("Tahun wajib di isi"),
-  harga_baru: Yup.string().required("Harga baru wajib di isi"),
-  merk: Yup.string().required("Merk wajib di isi"),
+  jumlah_silinder: Yup.string().required("Kata sandi wajib di isi"),
   transmisi: Yup.string().required("transmisi wajib di isi"),
   jenis: Yup.string().required("Jenis wajib di isi"),
 });
 
 const FormInitialValue = {
+  id: "",
+  nama: "",
   volume_silinder: "",
   jumlah_silinder: "",
-  tahun: "",
-  harga_baru: "",
   merk: "",
   transmisi: "",
   jenis: "",
 };
 
-const Home = () => {
-  const formikRef = React.useRef(null);
-  const [show, setShow] = React.useState(false);
-  const { mutate, isLoading } = usePrediction();
-  const [pricePrediction, setPricePrediction] = React.useState("");
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+const MotorcycleEdit = () => {
+  const { id } = useParams();
+  const formikRef = useRef(null);
+  const navigate = useNavigate();
+  const { mutate, isLoading } = useEditMotorcycle(id);
+  const { data, isLoading: isLoadingDetail } = useDetailMotorcycle(id);
+  const setSuccessToast = useStoreActions((actions) => actions.setSuccessToast);
+  const setErrorToast = useStoreActions((actions) => actions.setErrorToast);
 
   const handleFormSubmit = (formValue) => {
     mutate(formValue, {
       onSuccess: (res) => {
-        const { price } = res?.data;
-
-        setPricePrediction(price);
-        handleShow();
+        // setSuccessToast(res.message);
+        navigate("/motorcycle", { replace: true });
+      },
+      onError: (err) => {
+        // setErrorToast(err.message);
       },
     });
   };
 
+  useEffect(() => {
+    if (data?.success) {
+      Object.keys(FormInitialValue).forEach((key) => {
+        formikRef.current?.setFieldValue(key, data?.data?.[key]);
+      });
+    }
+  }, [data]);
+
   return (
-    <MainLayout title={"Prediksi Harga Sepeda Motor"}>
-      <Modal show={show} onHide={handleClose} centered>
-        <Modal.Header>
-          <Modal.Title>
-            <h5>Hasil Perdiksi harga</h5>
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <h1 className="fw-bold text-center">{pricePrediction}</h1>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button className="btn-primary" onClick={handleClose}>
-            Tutup
-          </Button>
-        </Modal.Footer>
-      </Modal>
+    <MainLayout title="Tambah Sepeda Motor">
       <Formik
         initialValues={FormInitialValue}
         innerRef={formikRef}
@@ -85,6 +80,17 @@ const Home = () => {
             <Container>
               <Row>
                 <Col lg={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Nama Sepeda Motor</Form.Label>
+                    <Form.Control
+                      disabled={isLoading}
+                      name="nama"
+                      type="text"
+                      value={values?.nama}
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                    />
+                  </Form.Group>
                   <Form.Group className="mb-3">
                     <Form.Label>Volume Silinder</Form.Label>
                     <Form.Control
@@ -107,46 +113,8 @@ const Home = () => {
                       onChange={handleChange}
                     />
                   </Form.Group>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Harga Baru</Form.Label>
-                    <Form.Control
-                      disabled={isLoading}
-                      name="harga_baru"
-                      type="number"
-                      value={values?.harga_baru}
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                    />
-                  </Form.Group>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Tahun Pembuatan</Form.Label>
-                    <Form.Control
-                      disabled={isLoading}
-                      name="tahun"
-                      type="number"
-                      value={values?.tahun}
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                    />
-                  </Form.Group>
                 </Col>
                 <Col lg={6}>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Tranmisi</Form.Label>
-                    <Form.Select
-                      disabled={isLoading}
-                      name="transmisi"
-                      type="text"
-                      value={values?.transmisi}
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                    >
-                      <option>Pilih Transmisi</option>
-                      {transmisiOptions.map((option) => (
-                        <option value={option.value}>{option.label}</option>
-                      ))}
-                    </Form.Select>
-                  </Form.Group>
                   <Form.Group className="mb-3">
                     <Form.Label>Merk</Form.Label>
                     <Form.Select
@@ -159,6 +127,22 @@ const Home = () => {
                     >
                       <option>Pilih Merk</option>
                       {merkOptions.map((option) => (
+                        <option value={option.value}>{option.label}</option>
+                      ))}
+                    </Form.Select>
+                  </Form.Group>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Tranmisi</Form.Label>
+                    <Form.Select
+                      disabled={isLoading}
+                      name="transmisi"
+                      type="text"
+                      value={values?.transmisi}
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                    >
+                      <option>Pilih Transmisi</option>
+                      {transmisiOptions.map((option) => (
                         <option value={option.value}>{option.label}</option>
                       ))}
                     </Form.Select>
@@ -179,23 +163,22 @@ const Home = () => {
                       ))}
                     </Form.Select>
                   </Form.Group>
-                  <Form.Group
-                    className="mb-3"
-                    controlId="exampleForm.ControlInput1"
-                  >
-                    <div className="d-grid gap-2 pt-4">
-                      <Button
-                        variant="primary"
-                        size="lg"
-                        disabled={
-                          !SchemaValidation.isValidSync(values) || isLoading
-                        }
-                        type="submit"
-                      >
-                        Prediksi
-                      </Button>
-                    </div>
-                  </Form.Group>
+                </Col>
+              </Row>
+              <Row className="justify-content-center">
+                <Col lg={3}>
+                  <div className="d-grid gap-2 pt-4">
+                    <Button
+                      variant="primary"
+                      size="lg"
+                      disabled={
+                        !SchemaValidation.isValidSync(values) || isLoading
+                      }
+                      type="submit"
+                    >
+                      Simpan
+                    </Button>
+                  </div>
                 </Col>
               </Row>
             </Container>
@@ -206,4 +189,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default MotorcycleEdit;

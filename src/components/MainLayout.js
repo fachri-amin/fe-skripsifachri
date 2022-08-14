@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import { useStoreActions, useStoreState } from "easy-peasy";
 import { useNavigate } from "react-router";
@@ -19,8 +20,10 @@ const drawerWidth = 240;
 const MainLayout = ({ children, title = "title" }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const logout = useStoreActions((actions) => actions.logout);
-  const successToast = useStoreState((state) => state.setSuccessToast);
-  const errorToast = useStoreState((state) => state.setErrorToast);
+  const successToast = useStoreState((state) => state.successToast);
+  const setSuccessToast = useStoreActions((actions) => actions.setSuccessToast);
+  const errorToast = useStoreState((state) => state.errorToast);
+  const setErrorToast = useStoreActions((actions) => actions.setErrorToast);
   const navigate = useNavigate();
 
   const handleMenu = (event) => {

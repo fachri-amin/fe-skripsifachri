@@ -1,12 +1,17 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useMemo, useEffect } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MainLayout from "../components/MainLayout";
 import Table from "../components/Table";
-import { useSale } from "../hooks/Sales";
+import { useSale, useDeleteSale } from "../hooks/Sales";
+import ModalConfirmation from "../components/ModalConfirmation";
+import { Button, Col, Row } from "react-bootstrap";
 
 const Sales = () => {
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(false);
   const { data, isLoading, filter, filterSales } = useSale();
+  const { mutate: deleteMotorcycle } = useDeleteSale();
   const navigate = useNavigate();
 
   const columns = useMemo(
@@ -39,30 +44,30 @@ const Sales = () => {
       {
         Header: "Aksi",
         accessor: "id",
-        Cell: ({ row }) => (
-          <>
-            <a
-              className="text-orange wait-pay"
-              style={{ cursor: "pointer" }}
-              onClick={() => navigate.push(`/`)}
-            >
-              add
-            </a>
-            <a
-              className={"text-orange wait-pay ms-3"}
-              style={{ cursor: "pointer" }}
-              title={
-                !row.original.can_delete &&
-                "Data tidak dapat dihapus karena sudah digunakan"
-              }
-              onClick={() => {
-                console.log("delete");
-              }}
-            >
-              delete
-            </a>
-          </>
-        ),
+        Cell: ({ row }) => {
+          console.log(row);
+          return (
+            <>
+              <a
+                className="text-orange wait-pay btn btn-secondary"
+                style={{ cursor: "pointer" }}
+                onClick={() => navigate(`/sales/edit/${row.values.id}`)}
+              >
+                Edit
+              </a>
+              <a
+                className={"text-orange wait-pay ms-3 btn btn-danger"}
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  setDeleteId(row.values.id);
+                  setShowDeleteModal(true);
+                }}
+              >
+                delete
+              </a>
+            </>
+          );
+        },
       },
     ],
     []
@@ -74,8 +79,43 @@ const Sales = () => {
       idSerial: (filter?.page - 1) * 10 + index + 1,
     })) || [];
 
+  const handleDeleteData = () => {
+    deleteMotorcycle(deleteId, {
+      onSuccess: () => {
+        window.scrollTo(0, 0);
+        setShowDeleteModal(false);
+        setDeleteId(null);
+      },
+      onError: (res) => {
+        // showToast("error", convertErrorMessageFormat(res.response.status, res.response.data.message), null);
+      },
+    });
+  };
+
   return (
     <MainLayout title={"Sepeda Motor"}>
+      <ModalConfirmation
+        title={"Konfirmasi Hapus Sepeda Motor"}
+        bodyText={"Ingin menghapus data sepeda motor ini?"}
+        show={showDeleteModal}
+        handleClose={() => setShowDeleteModal(false)}
+        handleReject={() => setShowDeleteModal(false)}
+        handleAccept={handleDeleteData}
+      />
+      <Row className="justify-content-end mb-4">
+        <Col lg={3}>
+          <div className="d-grid gap-2 pt-4">
+            <Button
+              variant="primary"
+              size="lg"
+              type="button"
+              onClick={() => navigate("/sales/add", { replace: true })}
+            >
+              Tambah Penjualan
+            </Button>
+          </div>
+        </Col>
+      </Row>
       <Table
         columns={columns}
         data={dataWithIDSerial}

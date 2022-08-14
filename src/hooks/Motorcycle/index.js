@@ -1,2 +1,2 @@
-// export * from "./useMutationDivisi";
+export * from "./useMutation";
 export * from "./useQuery";
