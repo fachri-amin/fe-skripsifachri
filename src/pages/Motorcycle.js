@@ -13,6 +13,7 @@ import {
 import { Button, Col, Row } from "react-bootstrap";
 import AddBoxRoundedIcon from "@mui/icons-material/AddBoxRounded";
 import IndeterminateCheckBoxRoundedIcon from "@mui/icons-material/IndeterminateCheckBoxRounded";
+import { useStoreActions } from "easy-peasy";
 
 const Motorcycle = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -22,6 +23,8 @@ const Motorcycle = () => {
   const { mutate: increaseStokMotorcycle } = useIncreaseStokMotorcycle();
   const { mutate: decreaseStokMotorcycle } = useDecreaseStokMotorcycle();
   const [deleteId, setDeleteId] = useState(false);
+  const setSuccessToast = useStoreActions((actions) => actions.setSuccessToast);
+  const setErrorToast = useStoreActions((actions) => actions.setErrorToast);
 
   const columns = useMemo(
     () => [
@@ -113,13 +116,14 @@ const Motorcycle = () => {
 
   const handleDeleteData = () => {
     deleteMotorcycle(deleteId, {
-      onSuccess: () => {
+      onSuccess: (res) => {
         window.scrollTo(0, 0);
         setShowDeleteModal(false);
         setDeleteId(null);
+        setSuccessToast(res.message);
       },
       onError: (res) => {
-        // showToast("error", convertErrorMessageFormat(res.response.status, res.response.data.message), null);
+        setErrorToast(res.message);
       },
     });
   };

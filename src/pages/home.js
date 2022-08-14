@@ -94,7 +94,15 @@ const Home = () => {
                       value={values?.volume_silinder}
                       onBlur={handleBlur}
                       onChange={handleChange}
+                      isInvalid={
+                        errors?.volume_silinder && touched?.volume_silinder
+                      }
                     />
+                    {errors?.volume_silinder && touched?.volume_silinder && (
+                      <p className="form-error-item-message">
+                        {errors?.volume_silinder}
+                      </p>
+                    )}
                   </Form.Group>
                   <Form.Group className="mb-3">
                     <Form.Label>Jumlah Silinder</Form.Label>
@@ -105,7 +113,15 @@ const Home = () => {
                       value={values?.jumlah_silinder}
                       onBlur={handleBlur}
                       onChange={handleChange}
+                      isInvalid={
+                        errors?.jumlah_silinder && touched?.jumlah_silinder
+                      }
                     />
+                    {errors?.jumlah_silinder && touched?.jumlah_silinder && (
+                      <p className="form-error-item-message">
+                        {errors?.jumlah_silinder}
+                      </p>
+                    )}
                   </Form.Group>
                   <Form.Group className="mb-3">
                     <Form.Label>Harga Baru</Form.Label>
@@ -116,7 +132,13 @@ const Home = () => {
                       value={values?.harga_baru}
                       onBlur={handleBlur}
                       onChange={handleChange}
+                      isInvalid={errors?.harga_baru && touched?.harga_baru}
                     />
+                    {errors?.harga_baru && touched?.harga_baru && (
+                      <p className="form-error-item-message">
+                        {errors?.harga_baru}
+                      </p>
+                    )}
                   </Form.Group>
                   <Form.Group className="mb-3">
                     <Form.Label>Tahun Pembuatan</Form.Label>
@@ -127,7 +149,11 @@ const Home = () => {
                       value={values?.tahun}
                       onBlur={handleBlur}
                       onChange={handleChange}
+                      isInvalid={errors?.tahun && touched?.tahun}
                     />
+                    {errors?.tahun && touched?.tahun && (
+                      <p className="form-error-item-message">{errors?.tahun}</p>
+                    )}
                   </Form.Group>
                 </Col>
                 <Col lg={6}>
@@ -140,12 +166,18 @@ const Home = () => {
                       value={values?.transmisi}
                       onBlur={handleBlur}
                       onChange={handleChange}
+                      isInvalid={errors?.transmisi && touched?.transmisi}
                     >
                       <option>Pilih Transmisi</option>
                       {transmisiOptions.map((option) => (
                         <option value={option.value}>{option.label}</option>
                       ))}
                     </Form.Select>
+                    {errors?.transmisi && touched?.transmisi && (
+                      <p className="form-error-item-message">
+                        {errors?.transmisi}
+                      </p>
+                    )}
                   </Form.Group>
                   <Form.Group className="mb-3">
                     <Form.Label>Merk</Form.Label>
@@ -156,12 +188,16 @@ const Home = () => {
                       value={values?.merk}
                       onBlur={handleBlur}
                       onChange={handleChange}
+                      isInvalid={errors?.merk && touched?.merk}
                     >
                       <option>Pilih Merk</option>
                       {merkOptions.map((option) => (
                         <option value={option.value}>{option.label}</option>
                       ))}
                     </Form.Select>
+                    {errors?.merk && touched?.merk && (
+                      <p className="form-error-item-message">{errors?.merk}</p>
+                    )}
                   </Form.Group>
                   <Form.Group className="mb-3">
                     <Form.Label>Jenis</Form.Label>
@@ -172,12 +208,16 @@ const Home = () => {
                       value={values?.jenis}
                       onBlur={handleBlur}
                       onChange={handleChange}
+                      isInvalid={errors?.jenis && touched?.jenis}
                     >
                       <option>Pilih Jenis</option>
                       {jenisOptions.map((option) => (
                         <option value={option.value}>{option.label}</option>
                       ))}
                     </Form.Select>
+                    {errors?.jenis && touched?.jenis && (
+                      <p className="form-error-item-message">{errors?.jenis}</p>
+                    )}
                   </Form.Group>
                   <Form.Group
                     className="mb-3"

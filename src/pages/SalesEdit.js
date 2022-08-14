@@ -36,11 +36,11 @@ const MotorcycleEdit = () => {
   const handleFormSubmit = (formValue) => {
     mutate(formValue, {
       onSuccess: (res) => {
-        // setSuccessToast(res.message);
+        setSuccessToast(res.message);
         navigate("/sales", { replace: true });
       },
       onError: (err) => {
-        // setErrorToast(err.message);
+        setErrorToast(err?.response?.data?.message);
       },
     });
   };
@@ -81,13 +81,20 @@ const MotorcycleEdit = () => {
                   <Form.Group className="mb-3">
                     <Form.Label>Nama Sepeda Motor</Form.Label>
                     {detail && (
-                      <SelectMotorcycle
-                        data={data || []}
-                        defaultValue={detail?.data?.motor_detail?.nama}
-                        onSelect={(motorcycle) => {
-                          setFieldValue("motor_detail", motorcycle.value.id);
-                        }}
-                      />
+                      <>
+                        <SelectMotorcycle
+                          data={data || []}
+                          defaultValue={detail?.data?.motor_detail?.nama}
+                          onSelect={(motorcycle) => {
+                            setFieldValue("motor_detail", motorcycle.value.id);
+                          }}
+                        />
+                        {errors?.motor_detail && touched?.motor_detail && (
+                          <p className="form-error-item-message">
+                            {errors?.motor_detail}
+                          </p>
+                        )}
+                      </>
                     )}
                   </Form.Group>
                   <Form.Group className="mb-3">
@@ -99,7 +106,11 @@ const MotorcycleEdit = () => {
                       value={values?.tahun}
                       onBlur={handleBlur}
                       onChange={handleChange}
+                      isInvalid={errors?.tahun && touched?.tahun}
                     />
+                    {errors?.tahun && touched?.tahun && (
+                      <p className="form-error-item-message">{errors?.tahun}</p>
+                    )}
                   </Form.Group>
                 </Col>
                 <Col lg={6}>
@@ -112,7 +123,13 @@ const MotorcycleEdit = () => {
                       value={values?.harga_baru}
                       onBlur={handleBlur}
                       onChange={handleChange}
+                      isInvalid={errors?.harga_baru && touched?.harga_baru}
                     />
+                    {errors?.harga_baru && touched?.harga_baru && (
+                      <p className="form-error-item-message">
+                        {errors?.harga_baru}
+                      </p>
+                    )}
                   </Form.Group>
                   <Form.Group className="mb-3">
                     <Form.Label>Harga Bekas</Form.Label>
@@ -123,7 +140,13 @@ const MotorcycleEdit = () => {
                       value={values?.harga_bekas}
                       onBlur={handleBlur}
                       onChange={handleChange}
+                      isInvalid={errors?.harga_bekas && touched?.harga_bekas}
                     />
+                    {errors?.harga_bekas && touched?.harga_bekas && (
+                      <p className="form-error-item-message">
+                        {errors?.harga_bekas}
+                      </p>
+                    )}
                   </Form.Group>
                 </Col>
               </Row>

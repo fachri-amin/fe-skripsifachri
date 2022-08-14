@@ -6,6 +6,7 @@ import Table from "../components/Table";
 import { useSale, useDeleteSale } from "../hooks/Sales";
 import ModalConfirmation from "../components/ModalConfirmation";
 import { Button, Col, Row } from "react-bootstrap";
+import { useStoreActions } from "easy-peasy";
 
 const Sales = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -13,6 +14,8 @@ const Sales = () => {
   const { data, isLoading, filter, filterSales } = useSale();
   const { mutate: deleteMotorcycle } = useDeleteSale();
   const navigate = useNavigate();
+  const setSuccessToast = useStoreActions((actions) => actions.setSuccessToast);
+  const setErrorToast = useStoreActions((actions) => actions.setErrorToast);
 
   const columns = useMemo(
     () => [
@@ -45,7 +48,6 @@ const Sales = () => {
         Header: "Aksi",
         accessor: "id",
         Cell: ({ row }) => {
-          console.log(row);
           return (
             <>
               <a
@@ -81,13 +83,14 @@ const Sales = () => {
 
   const handleDeleteData = () => {
     deleteMotorcycle(deleteId, {
-      onSuccess: () => {
+      onSuccess: (res) => {
         window.scrollTo(0, 0);
         setShowDeleteModal(false);
         setDeleteId(null);
+        setSuccessToast(res.message);
       },
       onError: (res) => {
-        // showToast("error", convertErrorMessageFormat(res.response.status, res.response.data.message), null);
+        setErrorToast(res.message);
       },
     });
   };

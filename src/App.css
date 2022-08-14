@@ -6,6 +6,11 @@
   #EEEEEE
 */
 
+.form-error-item-message {
+  color: red;
+  font-size: 14px;
+}
+
 .suggestion-container input {
   border: none;
 }

@@ -17,8 +17,10 @@ const Login = () => {
   const { mutate, isLoading } = useLogin();
   const formikRef = React.useRef(null);
   const navigate = useNavigate();
+  const [error, setError] = React.useState(null);
 
   const handleFormSubmit = (formValue) => {
+    setError(null);
     mutate(formValue, {
       onSuccess: (res) => {
         const { token, user } = res?.data;
@@ -27,6 +29,9 @@ const Login = () => {
         localStorage.setItem("user", JSON.stringify({ ...user, token }));
         setAuthHeader(token);
         navigate("/", { replace: true });
+      },
+      onError: (err) => {
+        setError(err.response.data.message);
       },
     });
   };
@@ -98,7 +103,13 @@ const Login = () => {
                             value={values?.username}
                             onBlur={handleBlur}
                             onChange={handleChange}
+                            isInvalid={errors?.username && touched?.username}
                           />
+                          {errors?.username && touched?.username && (
+                            <p className="form-error-item-message mt-1">
+                              {errors?.username}
+                            </p>
+                          )}
                         </Form.Group>
                         <Form.Group className="mb-3">
                           <Form.Label className="text-white">
@@ -111,7 +122,13 @@ const Login = () => {
                             value={values?.password}
                             onBlur={handleBlur}
                             onChange={handleChange}
+                            isInvalid={errors?.password && touched?.password}
                           />
+                          {errors?.password && touched?.password && (
+                            <p className="form-error-item-message mt-1">
+                              {errors?.password}
+                            </p>
+                          )}
                         </Form.Group>
                         <Form.Group
                           className="mb-3"
@@ -130,6 +147,11 @@ const Login = () => {
                             Masuk
                           </Button>
                         </div>
+                        {error && (
+                          <p className="form-error-item-message mt-2">
+                            {error}
+                          </p>
+                        )}
                       </Form>
                     )}
                   </Formik>

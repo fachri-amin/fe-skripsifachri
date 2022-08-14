@@ -13,11 +13,11 @@ import {
 } from "../constant/prediction";
 
 const SchemaValidation = Yup.object().shape({
-  nama: Yup.string().required("Username Wajib diisi"),
-  merk: Yup.string().required("Kata sandi wajib di isi"),
-  volume_silinder: Yup.string().required("Username Wajib diisi"),
-  jumlah_silinder: Yup.string().required("Kata sandi wajib di isi"),
-  transmisi: Yup.string().required("transmisi wajib di isi"),
+  nama: Yup.string().required("Nama wajib diisi"),
+  merk: Yup.string().required("Merk wajib di isi"),
+  volume_silinder: Yup.string().required("Volume silinder Wajib diisi"),
+  jumlah_silinder: Yup.string().required("Jumlah silinder wajib di isi"),
+  transmisi: Yup.string().required("Transmisi wajib di isi"),
   jenis: Yup.string().required("Jenis wajib di isi"),
 });
 
@@ -40,11 +40,11 @@ const MotorcycleAdd = () => {
   const handleFormSubmit = (formValue) => {
     mutate(formValue, {
       onSuccess: (res) => {
-        // setSuccessToast(res.message);
+        setSuccessToast(res.message);
         navigate("/motorcycle", { replace: true });
       },
       onError: (err) => {
-        // setErrorToast(err.message);
+        setErrorToast(err?.response?.data?.message);
       },
     });
   };
@@ -78,7 +78,11 @@ const MotorcycleAdd = () => {
                       value={values?.nama}
                       onBlur={handleBlur}
                       onChange={handleChange}
+                      isInvalid={errors?.nama && touched?.nama}
                     />
+                    {errors?.nama && touched?.nama && (
+                      <p className="form-error-item-message">{errors?.nama}</p>
+                    )}
                   </Form.Group>
                   <Form.Group className="mb-3">
                     <Form.Label>Volume Silinder</Form.Label>
@@ -89,7 +93,15 @@ const MotorcycleAdd = () => {
                       value={values?.volume_silinder}
                       onBlur={handleBlur}
                       onChange={handleChange}
+                      isInvalid={
+                        errors?.volume_silinder && touched?.volume_silinder
+                      }
                     />
+                    {errors?.volume_silinder && touched?.volume_silinder && (
+                      <p className="form-error-item-message">
+                        {errors?.volume_silinder}
+                      </p>
+                    )}
                   </Form.Group>
                   <Form.Group className="mb-3">
                     <Form.Label>Jumlah Silinder</Form.Label>
@@ -100,7 +112,15 @@ const MotorcycleAdd = () => {
                       value={values?.jumlah_silinder}
                       onBlur={handleBlur}
                       onChange={handleChange}
+                      isInvalid={
+                        errors?.jumlah_silinder && touched?.jumlah_silinder
+                      }
                     />
+                    {errors?.jumlah_silinder && touched?.jumlah_silinder && (
+                      <p className="form-error-item-message">
+                        {errors?.jumlah_silinder}
+                      </p>
+                    )}
                   </Form.Group>
                 </Col>
                 <Col lg={6}>
@@ -113,12 +133,16 @@ const MotorcycleAdd = () => {
                       value={values?.merk}
                       onBlur={handleBlur}
                       onChange={handleChange}
+                      isInvalid={errors?.merk && touched?.merk}
                     >
                       <option>Pilih Merk</option>
                       {merkOptions.map((option) => (
                         <option value={option.value}>{option.label}</option>
                       ))}
                     </Form.Select>
+                    {errors?.merk && touched?.merk && (
+                      <p className="form-error-item-message">{errors?.merk}</p>
+                    )}
                   </Form.Group>
                   <Form.Group className="mb-3">
                     <Form.Label>Tranmisi</Form.Label>
@@ -129,12 +153,18 @@ const MotorcycleAdd = () => {
                       value={values?.transmisi}
                       onBlur={handleBlur}
                       onChange={handleChange}
+                      isInvalid={errors?.transmisi && touched?.transmisi}
                     >
                       <option>Pilih Transmisi</option>
                       {transmisiOptions.map((option) => (
                         <option value={option.value}>{option.label}</option>
                       ))}
                     </Form.Select>
+                    {errors?.transmisi && touched?.transmisi && (
+                      <p className="form-error-item-message">
+                        {errors?.transmisi}
+                      </p>
+                    )}
                   </Form.Group>
                   <Form.Group className="mb-3">
                     <Form.Label>Jenis</Form.Label>
@@ -145,12 +175,16 @@ const MotorcycleAdd = () => {
                       value={values?.jenis}
                       onBlur={handleBlur}
                       onChange={handleChange}
+                      isInvalid={errors?.jenis && touched?.jenis}
                     >
                       <option>Pilih Jenis</option>
                       {jenisOptions.map((option) => (
                         <option value={option.value}>{option.label}</option>
                       ))}
                     </Form.Select>
+                    {errors?.jenis && touched?.jenis && (
+                      <p className="form-error-item-message">{errors?.jenis}</p>
+                    )}
                   </Form.Group>
                 </Col>
               </Row>

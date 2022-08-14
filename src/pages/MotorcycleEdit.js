@@ -43,11 +43,11 @@ const MotorcycleEdit = () => {
   const handleFormSubmit = (formValue) => {
     mutate(formValue, {
       onSuccess: (res) => {
-        // setSuccessToast(res.message);
+        setSuccessToast(res.message);
         navigate("/motorcycle", { replace: true });
       },
       onError: (err) => {
-        // setErrorToast(err.message);
+        setErrorToast(err?.response?.data?.message);
       },
     });
   };
@@ -89,7 +89,11 @@ const MotorcycleEdit = () => {
                       value={values?.nama}
                       onBlur={handleBlur}
                       onChange={handleChange}
+                      isInvalid={errors?.nama && touched?.nama}
                     />
+                    {errors?.nama && touched?.nama && (
+                      <p className="form-error-item-message">{errors?.nama}</p>
+                    )}
                   </Form.Group>
                   <Form.Group className="mb-3">
                     <Form.Label>Volume Silinder</Form.Label>
@@ -100,7 +104,15 @@ const MotorcycleEdit = () => {
                       value={values?.volume_silinder}
                       onBlur={handleBlur}
                       onChange={handleChange}
+                      isInvalid={
+                        errors?.volume_silinder && touched?.volume_silinder
+                      }
                     />
+                    {errors?.volume_silinder && touched?.volume_silinder && (
+                      <p className="form-error-item-message">
+                        {errors?.volume_silinder}
+                      </p>
+                    )}
                   </Form.Group>
                   <Form.Group className="mb-3">
                     <Form.Label>Jumlah Silinder</Form.Label>
@@ -111,7 +123,15 @@ const MotorcycleEdit = () => {
                       value={values?.jumlah_silinder}
                       onBlur={handleBlur}
                       onChange={handleChange}
+                      isInvalid={
+                        errors?.jumlah_silinder && touched?.jumlah_silinder
+                      }
                     />
+                    {errors?.jumlah_silinder && touched?.jumlah_silinder && (
+                      <p className="form-error-item-message">
+                        {errors?.jumlah_silinder}
+                      </p>
+                    )}
                   </Form.Group>
                 </Col>
                 <Col lg={6}>
@@ -124,12 +144,16 @@ const MotorcycleEdit = () => {
                       value={values?.merk}
                       onBlur={handleBlur}
                       onChange={handleChange}
+                      isInvalid={errors?.merk && touched?.merk}
                     >
                       <option>Pilih Merk</option>
                       {merkOptions.map((option) => (
                         <option value={option.value}>{option.label}</option>
                       ))}
                     </Form.Select>
+                    {errors?.merk && touched?.merk && (
+                      <p className="form-error-item-message">{errors?.merk}</p>
+                    )}
                   </Form.Group>
                   <Form.Group className="mb-3">
                     <Form.Label>Tranmisi</Form.Label>
@@ -140,12 +164,18 @@ const MotorcycleEdit = () => {
                       value={values?.transmisi}
                       onBlur={handleBlur}
                       onChange={handleChange}
+                      isInvalid={errors?.transmisi && touched?.transmisi}
                     >
                       <option>Pilih Transmisi</option>
                       {transmisiOptions.map((option) => (
                         <option value={option.value}>{option.label}</option>
                       ))}
                     </Form.Select>
+                    {errors?.transmisi && touched?.transmisi && (
+                      <p className="form-error-item-message">
+                        {errors?.transmisi}
+                      </p>
+                    )}
                   </Form.Group>
                   <Form.Group className="mb-3">
                     <Form.Label>Jenis</Form.Label>
@@ -156,12 +186,16 @@ const MotorcycleEdit = () => {
                       value={values?.jenis}
                       onBlur={handleBlur}
                       onChange={handleChange}
+                      isInvalid={errors?.jenis && touched?.jenis}
                     >
                       <option>Pilih Jenis</option>
                       {jenisOptions.map((option) => (
                         <option value={option.value}>{option.label}</option>
                       ))}
                     </Form.Select>
+                    {errors?.jenis && touched?.jenis && (
+                      <p className="form-error-item-message">{errors?.jenis}</p>
+                    )}
                   </Form.Group>
                 </Col>
               </Row>
