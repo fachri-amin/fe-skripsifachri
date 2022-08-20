@@ -3,15 +3,30 @@ stages:
   - staging
 
 test:
-  image: node:16.8.0
+  # Using the node alpine image to build the React app
+  image: node:alpine
   stage: test
+
+  # Announce the URL as per CRA docs
+  # https://create-react-app.dev/docs/advanced-configuration/
+  variables:
+    PUBLIC_URL: /hello-react
+
+  # Cache node modules - speeds up future builds
+  cache:
+    paths:
+      - node_modules
   script:
-    - npm install
-    - npm run test
+    - npm install # Install all dependencies
+    - npm run build # Build for production
+    - cp public/index.html public/404.html # Not necessary, but helps with https://medium.com/@pshrmn/demystifying-single-page-applications-3068d0555d46
+    - mv public _public # CRA and gitlab pages both use the public folder. Only do this in a build pipeline.
+    - mv build public # Move build files to public dir for Gitlab Pages
+  artifacts:
+    paths:
+      - public # The built files for Gitlab Pages to serve
   only:
-    - master
-  tags:
-    - docker
+    - master # Only run on master branch
 
 staging:
   stage: staging
