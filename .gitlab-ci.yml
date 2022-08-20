@@ -7,7 +7,7 @@ test:
   stage: test
   script:
     - npm install
-    - npm heroku-postbuild
+    - npm run heroku-postbuild
   only:
     - master
   tags:
