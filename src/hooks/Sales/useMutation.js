@@ -1,4 +1,4 @@
-import axios from "../../services/axios";
+import axios from "services/axios";
 import { useMutation, useQueryClient } from "react-query";
 
 export function useAddSale(options = {}) {

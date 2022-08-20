@@ -1,5 +1,5 @@
 import axios from "axios";
-import CONFIG from "../config/env";
+import CONFIG from "config/env";
 
 const BASE_URL = CONFIG.endpoint.API_ENDPOINT;
 let instance = null;

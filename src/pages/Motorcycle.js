@@ -1,15 +1,15 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import MainLayout from "../components/MainLayout";
-import Table from "../components/Table";
-import ModalConfirmation from "../components/ModalConfirmation";
+import MainLayout from "components/MainLayout";
+import Table from "components/Table";
+import ModalConfirmation from "components/ModalConfirmation";
 import {
   useMotorcycle,
   useDeleteMotorcycle,
   useIncreaseStokMotorcycle,
   useDecreaseStokMotorcycle,
-} from "../hooks/Motorcycle";
+} from "hooks/Motorcycle";
 import { Button, Col, Row } from "react-bootstrap";
 import AddBoxRoundedIcon from "@mui/icons-material/AddBoxRounded";
 import IndeterminateCheckBoxRoundedIcon from "@mui/icons-material/IndeterminateCheckBoxRounded";

@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import MainLayout from "../components/MainLayout";
-import Table from "../components/Table";
-import { useSale, useDeleteSale } from "../hooks/Sales";
-import ModalConfirmation from "../components/ModalConfirmation";
+import MainLayout from "components/MainLayout";
+import Table from "components/Table";
+import { useSale, useDeleteSale } from "hooks/Sales";
+import ModalConfirmation from "components/ModalConfirmation";
 import { Button, Col, Row } from "react-bootstrap";
 import { useStoreActions } from "easy-peasy";
 

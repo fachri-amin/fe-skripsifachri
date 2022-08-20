@@ -1,12 +1,12 @@
 import { Routes, Route } from "react-router-dom";
-import Home from "../pages/Home";
-import Login from "../pages/Login";
-import Sales from "../pages/Sales";
-import SalesAdd from "../pages/SalesAdd";
-import SalesEdit from "../pages/SalesEdit";
-import Motorcycle from "../pages/Motorcycle";
-import MotorcycleAdd from "../pages/MotorcycleAdd";
-import MotorcycleEdit from "../pages/MotorcycleEdit";
+import Home from "pages/Home";
+import Login from "pages/Login";
+import Sales from "pages/Sales";
+import SalesAdd from "pages/SalesAdd";
+import SalesEdit from "pages/SalesEdit";
+import Motorcycle from "pages/Motorcycle";
+import MotorcycleAdd from "pages/MotorcycleAdd";
+import MotorcycleEdit from "pages/MotorcycleEdit";
 
 import RequireAuth from "./requireAuth";
 
