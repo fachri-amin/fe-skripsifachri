@@ -1,67 +1,58 @@
-"use strict";
-
-const path = require("path");
-const loaders = require("./webpack/loaders");
-const plugins = require("./webpack/plugins");
-
-const applicationEntries =
-  process.env.NODE_ENV === "development"
-    ? ["webpack-hot-middleware/client?reload=true"]
-    : [];
-
-const mainEntry =
-  process.env.NODE_ENV === "development"
-    ? "./src/sample/index.tsx"
-    : "./src/lib/index.tsx";
+var webpack = require("webpack");
+var path = require("path");
 
 module.exports = {
-  entry: [mainEntry].concat(applicationEntries),
-
+  entry: [
+    "babel-polyfill",
+    "script-loader!jquery/dist/jquery.min.js",
+    "script-loader!foundation-sites/dist/js/foundation.min.js",
+    "./app/app.jsx",
+  ],
   output: {
-    path: path.join(__dirname, "dist"),
-    filename: "[name].js",
-    publicPath: "/",
-    sourceMapFilename: "[name].js.map",
-    chunkFilename: "[id].chunk.js",
+    path: __dirname,
+    filename: "./public/bundle.js",
   },
-
-  devtool:
-    process.env.NODE_ENV === "production" ? "source-map" : "inline-source-map",
-
+  externals: {
+    jquery: "jQuery",
+  },
+  plugins: [
+    new webpack.ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery",
+    }),
+  ],
   resolve: {
-    root: path.resolve("./src"),
-    extensions: ["", ".webpack.js", ".web.js", ".tsx", ".ts", ".js", ".json"],
+    modules: [__dirname, "app/components", "node_modules"],
+    alias: {
+      applicationStyles: "app/styles/app.scss",
+    },
+    extensions: ["*", ".js", ".jsx"],
   },
-
-  plugins: plugins,
-
-  devServer: {
-    historyApiFallback: { index: "/" },
-  },
-
   module: {
-    preLoaders: [loaders.tslint],
-    loaders: [
-      loaders.tsx,
-      loaders.html,
-      loaders.css,
-      loaders.scss,
-      loaders.eot,
-      loaders.svg,
-      loaders.ttf,
-      loaders.woff,
-      loaders.json,
+    rules: [
       {
-        test: /\.png$/,
-        loader: "url-loader",
-        query: { mimetype: "image/png" },
+        loader: "babel-loader",
+        query: {
+          presets: ["react", "es2015", "es2017", "stage-0"],
+          plugins: ["transform-runtime"],
+        },
+        test: /\.jsx?$/,
+        exclude: /(node_modules|bower_components)/,
+      },
+
+      {
+        test: /\.scss$/,
+        use: [
+          {
+            loader: "sass-loader",
+            options: {
+              includePaths: ["./node_modules/foundation-sites/scss"],
+            },
+          },
+        ],
       },
     ],
   },
 
-  externals: {
-    "react/lib/ReactContext": "window",
-    "react/lib/ExecutionEnvironment": true,
-    "react/addons": true,
-  },
+  devtool: "cheap-module-eval-source-map",
 };
