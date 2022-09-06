@@ -1,13 +1,13 @@
 import { useRef, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useStoreActions } from "easy-peasy";
-import MainLayout from "components/MainLayout";
-import { useMotorcycleOptions } from "hooks/Motorcycle";
-import { useEditSale, useDetailSale } from "hooks/Sales";
+import MainLayout from "../components/MainLayout";
+import { useMotorcycleOptions } from "../hooks/Motorcycle";
+import { useEditSale, useDetailSale } from "../hooks/Sales";
 import { Button, Col, Container, Row, Form } from "react-bootstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import SelectMotorcycle from "components/SelectMotorcycle";
+import SelectMotorcycle from "../components/SelectMotorcycle";
 
 const SchemaValidation = Yup.object().shape({
   motor_detail: Yup.number().required("Sepeda motor wajib diisi"),

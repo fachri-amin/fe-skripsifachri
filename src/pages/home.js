@@ -1,5 +1,5 @@
 import React from "react";
-import MainLayout from "components/MainLayout";
+import MainLayout from "../components/MainLayout";
 import { Button, Col, Container, Row, Modal, Form } from "react-bootstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -7,8 +7,8 @@ import {
   jenisOptions,
   merkOptions,
   transmisiOptions,
-} from "constant/prediction";
-import { usePrediction } from "hooks";
+} from "../constant/prediction";
+import { usePrediction } from "../hooks";
 
 const SchemaValidation = Yup.object().shape({
   volume_silinder: Yup.string().required("Username Wajib diisi"),

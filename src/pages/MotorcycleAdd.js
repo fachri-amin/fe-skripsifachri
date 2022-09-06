@@ -1,8 +1,8 @@
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useStoreActions } from "easy-peasy";
-import MainLayout from "components/MainLayout";
-import { useAddMotorcycle } from "hooks/Motorcycle";
+import MainLayout from "../components/MainLayout";
+import { useAddMotorcycle } from "../hooks/Motorcycle";
 import { Button, Col, Container, Row, Form } from "react-bootstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -10,7 +10,7 @@ import {
   jenisOptions,
   merkOptions,
   transmisiOptions,
-} from "constant/prediction";
+} from "../constant/prediction";
 
 const SchemaValidation = Yup.object().shape({
   nama: Yup.string().required("Nama wajib diisi"),

@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import { Modal, Button } from "react-bootstrap";
-import menu from "config/menu";
+import menu from "../config/menu";
 
 const drawerWidth = 240;
 
