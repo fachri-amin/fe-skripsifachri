@@ -1,5 +1,17 @@
 stages:
+  - test
   - staging
+
+test:
+  image: node:16.8.0
+  stage: test
+  script:
+    - npm install
+    - npm run test
+  only:
+    - master
+  tags:
+    - docker
 
 staging:
   stage: staging
